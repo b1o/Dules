@@ -1,0 +1,9 @@
+Skill name,Damage,CD,Mana_cost,Effect
+Blink_strike,10,5,50,damage
+Smoke_screen,0,20,60,silence
+Backstab,15,0,0,auto_hit
+perma_invis,0,0,0,status
+hellfire_blast,10,6,70,damage
+vamp_aura,0,0,0,status
+crit_strike,0,0,0,status
+ressurection,0,0,0,status
