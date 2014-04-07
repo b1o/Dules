@@ -13,7 +13,7 @@ Few notes:
 3. Mana is yet to be implemented. Everything connected with it is just a placeholder.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 Update - v0.1/04.07.2014
 
 Changelog:
