@@ -12,6 +12,17 @@ Few notes:
 2. Currently there is no balance in the skills or whatever.
 3. Mana is yet to be implemented. Everything connected with it is just a placeholder.
 
+
+-------------------------------------------------------------------------------
+Update - v0.1/04.07.2014
+
+Changelog:
+1. Added the 'effect' variable to the skills. Omnislash and Moon glaives now work fine.
+
+To do:
+1. Mana still needs to be implemented.
+2. Make the 'heal' skill effect.
+
 -------------------------------------------------------------------------------
 Update - v0.1/04.07.2014
 
