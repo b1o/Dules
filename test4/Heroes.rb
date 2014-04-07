@@ -2,7 +2,7 @@ require 'os'
 
 class Hero
 	attr_accessor :name, :hp, :mana, :skill1_name, :skill2_name, :skill3_name, :ultimate_name, :dead, :skills
-	attr_reader :skill1_d, :skill2_d, :skill3_d, :skill4_d
+	attr_reader :skill1_d, :skill2_d, :skill3_d, :skill4_d, :skill1_effect, :skill2_effect, :skill3_effect, :ultimate_effect
 
 	def inititalize(name, hp, mana, skill1)
 		@name = name
@@ -40,6 +40,10 @@ class Luna < Hero
 		@skill1_name = "Lucent Beam"
 		@skill2_name = "Moon Glaives"
 		@skill3_name = "Lunar Blessing"
+		@skill1_effect = "ST"
+		@skill2_effect = "AOE"
+		@skill3_effect = "HEAL"
+		@ultimate_effect = ""
 		@ultimate = "Eclipse"
 		@skill1_d = "Deals 20 damage to a single target."
 		@skill2_d = "Deals 10 damage to 2 random enemy heroes"
@@ -54,7 +58,7 @@ class Luna < Hero
 		@mana = @mana - @mana_cost
 		enemy_hero.hp = enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@mana_cost} mana."
-		sleep(2)
+		sleep(1)
 	end
 
 	def skill2(enemy_player_pool)
@@ -75,7 +79,7 @@ class Luna < Hero
 		@heroes_to_attack.each do |hero|
 			hero.hp = hero.hp - @skill2_damage
 			puts "#{hero.name} took #{@skill2_damage} damage. Hp: #{hero.hp}"
-			sleep(2)
+			sleep(1)
 		end
 	end
 
@@ -85,7 +89,7 @@ class Luna < Hero
 		@mana = @mana - @mana_cost
 		ally_hero.hp += @heal
 		puts "#{@name} used #{@skill3_name} and healed #{ally_hero.name} for #{@heal} hit points."
-		sleep(2)
+		sleep(1)
 	end
 end
 
@@ -98,6 +102,10 @@ class Lich < Hero
 		@skill1_name = "Frost Blast"
 		@skill1_d = "Nukes a single enemy hero for 10 damage."
 		@skill1_damage = 10
+		@skill1_effect = "ST"
+		@skill2_effect = ""
+		@skill3_effect = ""
+		@ultimate_effect = ""
 		@dead = false
 		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate]
 	end
@@ -108,7 +116,7 @@ class Lich < Hero
 		@mana = @mana - @mana_cost
 		@enemy_hero.hp = @enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@mana_cost} mana."
-		sleep(2)
+		sleep(1)
 	end
 
 	def skill2
@@ -125,6 +133,10 @@ class Riki < Hero
 		@skill1_name = "Blink Strike"
 		@skill1_d = "Riki uses his stealth skills to sneak behind a enemy hero and deal 7 damage to him."
 		@skill1_damage = 7
+		@skill1_effect = "ST"
+		@skill2_effect = ""
+		@skill3_effect = ""
+		@ultimate_effect = ""
 		@dead = false
 		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate]
 	end
@@ -134,7 +146,7 @@ class Riki < Hero
 		@mana = @mana - @mana_cost
 		enemy_hero.hp = enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@mana_cost} mana."
-		sleep(2)
+		sleep(1)
 	end
 end
 
@@ -151,6 +163,10 @@ class Juggernaut < Hero
 		@ultimate_damage = 15
 		@ultimate_mana_cost = 30
 		@ultimate_d = "Omnislash"
+		@skill1_effect = "ST"
+		@skill2_effect = ""
+		@skill3_effect = ""
+		@ultimate_effect = "AOE"
 		@dead = false
 		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
 	end
@@ -160,7 +176,7 @@ class Juggernaut < Hero
 		@mana = @mana - @mana_cost
 		enemy_hero.hp = enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@mana_cost} mana."
-		sleep(2)
+		sleep(1)
 	end 
 
 	def ultimate(enemy_player_pool)
@@ -176,6 +192,5 @@ class Juggernaut < Hero
 				sleep(1)
 			end
 		end
-		sleep(1)
 	end
 end

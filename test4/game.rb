@@ -1,13 +1,14 @@
 require_relative 'Heroes.rb'
 
 class Game
-	attr_accessor :hero_pool, :player1, :player2, :player1_name, :player2_name, :selected_hero, :selected_spell, :selected_enemy_hero, :current_input
+	attr_accessor :hero_pool, :player1, :player2, :player1_name, :player2_name, :selected_hero, :selected_spell, :selected_enemy_hero, :current_input, :effect
 	attr_reader :invoked
 	def initialize
 		@invoked = false
 		@hero_pool = [Luna.new, Juggernaut.new, Lich.new, Riki.new]
 		@player1 = []
 		@player2 = []
+		@effect = ""
 	end
 
 	def os
@@ -16,6 +17,11 @@ class Game
 		else
 			@a = 'clear'
 		end
+	end
+
+	def set_os(os)
+		@os = os
+		@a = @os
 	end
 
 	def check_for_loss(player)
@@ -205,7 +211,7 @@ class Game
 		current_hero_status()
 		puts @current_input
 		puts
-		print "Select a spell to attack with: "
+		puts "Select a spell to attack with:\n"
 		@selected_hero.skills.each do |skill|
 			puts skill
 		end
@@ -215,19 +221,47 @@ class Game
 			when @selected_hero.skill1_name 
 				@selected_spell = @selected_hero.skill1_name
 				@current_input = @current_input + " Skill: #{@selected_spell}"
+				if @selected_hero.skill1_effect == "ST"
+					@effect = "ST"
+				elsif @selected_hero.skill1_effect == "AOE"
+					@effect = "AOE"
+				elsif @selected_hero.skill1_effect == "HEAL"
+					@effect = "Heal"
+				end
 			when @selected_hero.skill2_name
 				@selected_spell = @selected_hero.skill2_name
 				@current_input = @current_input + " Skill: #{@selected_spell}"
+				if @selected_hero.skill2_effect == "ST"
+					@effect = "ST"
+				elsif @selected_hero.skill2_effect == "AOE"
+					@effect = "AOE"
+				elsif @selected_hero.skill2_effect == "HEAL"
+					@effect = "Heal"
+				end
 			when @selected_hero.skill3_name
 				@selected_spell = @selected_hero.skill3_name
 				@current_input = @current_input + " Skill: #{@selected_spell}"
+				if @selected_hero.skill3_effect == "ST"
+					@effect = "ST"
+				elsif @selected_hero.skill3_effect == "AOE"
+					@effect = "AOE"
+				elsif @selected_hero.skill3_effect == "HEAL"
+					@effect = "Heal"
+				end
 			when @selected_hero.ultimate_name
 				@selected_spell = @selected_hero.ultimate_name
 				@current_input = @current_input + " Skill: #{@selected_spell}"
+				if @selected_hero.ultimate_effect == "ST"
+					@effect = "ST"
+				elsif @selected_hero.ultimate_effect == "AOE"
+					@effect = "AOE"
+				elsif @selected_hero.ultimate_effect == "HEAL"
+					@effect = "Heal"
+				end
 			else
 				system(@a)
 				puts "Error: No such spell"
-				sleep(2)
+				sleep(1)
 				select_spell()
 		end
 	end
@@ -238,27 +272,76 @@ class Game
 		@hero.hp = "DEAD"
 		@hero.mana = "DEAD"
 		@hero.dead = true
-		sleep(2)
+		sleep(1)
+	end
+
+	def heal(player)
+		print "Choose the hero you wish to heal:\n"
+		player.each do |hero|
+			puts hero.name
+		end
+		@selected_hero = gets.chomp.capitalize
+
 	end
 
 	def attack(player, enemy_player)
 		@enemy_player = enemy_player
 		case @selected_spell
 			when @selected_hero.skill1_name
-				@selected_hero.skill1(@selected_enemy_hero)
-				if @selected_enemy_hero.hp <= 0
-					hero_kill(@selected_enemy_hero)
+				if @effect == "ST"
+					@selected_hero.skill1(@selected_enemy_hero)
+					if @selected_enemy_hero.hp <= 0
+						hero_kill(@selected_enemy_hero)
+					end
+				elsif @effect == "AOE"
+					@selected_hero.skill1(@enemy_player)
+					@enemy_player.each do |a|
+						if a.hp != 'DEAD'
+							if a.hp <= 0
+								hero_kill(a)
+							end
+						end
+					end
 				end
 			when @selected_hero.skill2_name
-				if @selected_hero.skill2_name == 'Moon Glaives'
+				if @effect == "AOE"
 					@selected_hero.skill2(@enemy_player)
-				else
+					@enemy_player.each do |a|
+						if a.hp != 'DEAD'
+							if a.hp <= 0
+								hero_kill(a)
+							end
+						end
+					end
+				elsif @effect == "ST"
 					@selected_hero.skill2(@selected_enemy_hero)
+					if @selected_enemy_hero.hp <= 0
+						hero_kill(@selected_enemy_hero)
+					end
 				end
 			when @selected_hero.skill3_name
-				#
+				if @effect == "ST"
+					@selected_hero.skill3(@selected_enemy_hero)
+					if @selected_enemy_hero.hp <= 0
+						hero_kill(@selected_enemy_hero)
+					end
+				elsif @effect == "AOE"
+					@selected_hero.skill13@enemy_player)
+					@enemy_player.each do |a|
+						if a.hp != 'DEAD'
+							if a.hp <= 0
+								hero_kill(a)
+							end
+						end
+					end
+				end
 			when @selected_hero.ultimate_name
-				if @selected_hero.ultimate_name == "Omnislash"	
+				if @effect == "ST"
+					@selected_hero.skill3(@selected_enemy_hero)
+					if @selected_enemy_hero.hp <= 0
+						hero_kill(@selected_enemy_hero)
+					end
+				elsif @effect == "AOE"	
 					@selected_hero.ultimate(@enemy_player)
 					@enemy_player.each do |a|
 						if a.hp != 'DEAD'
@@ -267,7 +350,6 @@ class Game
 							end
 						end
 					end
-					gets.chomp
 				end
 		end
 	end

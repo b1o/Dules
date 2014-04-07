@@ -4,7 +4,7 @@ require_relative 'Heroes.rb'
 game = Game.new
 player1 = game.player1
 player2 = game.player2
-game.os
+game.set_os('cls')
 turn = 0
 game.allocate_heroes
 until game.check_for_loss(player1) or game.check_for_loss(player2)
@@ -12,11 +12,9 @@ until game.check_for_loss(player1) or game.check_for_loss(player2)
 	if turn == 0
 		game.select_hero(player1)
 		game.select_spell
-		if game.selected_spell == "Omnislash" or game.selected_spell == "Moon Glaives"
+		if game.effect == "AOE" 
 			game.attack(player1, player2)
-		elsif game.selected_spell == "Lunar Blessing"
-			game.select_hero
-		else
+		elsif game.effect == "ST"
 			game.select_enemy_hero(player2)
 			game.attack(player1, player2)
 		end
@@ -24,9 +22,9 @@ until game.check_for_loss(player1) or game.check_for_loss(player2)
 	else
 		game.select_hero(player2)
 		game.select_spell
-		if game.selected_spell == "Omnislash"
+		if game.effect == "AOE"
 			game.attack(player2, player1)
-		else
+		elsif game.effect == "ST"
 			game.select_enemy_hero(player1)
 			game.attack(player2, player1)
 		end
