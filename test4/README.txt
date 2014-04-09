@@ -14,6 +14,21 @@ Few notes:
 
 
 ===============================================================================
+Update - v0.2/09.04.2014
+
+Changelog:
+1. Mana is added to the game !
+2. Added easier way for handling error messages -> Error.rb
+3. Added more cosmetic looks.
+
+Bugfixes:
+1. Fixed various bug with hero and spell selection.
+2. Fixed a bug with the skill Moon Glaives.
+
+To do:
+1. Heal method -> Healing skills.
+2. Complete the heroes skill sets.
+-------------------------------------------------------------------------------
 Update - v0.1/04.07.2014
 
 Changelog:
