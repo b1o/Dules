@@ -8,9 +8,8 @@ There are few things you need to run this code.
 >ruby main.rb to run the game
 
 Few notes:
-1. The game should end as soon as both heroes from one side die.
+1. The game should end as soon as both heroes from one side die or both heroes from one side run out of mana.
 2. Currently there is no balance in the skills or whatever.
-3. Mana is yet to be implemented. Everything connected with it is just a placeholder.
 
 
 ===============================================================================
@@ -20,6 +19,7 @@ Changelog:
 1. Mana is added to the game !
 2. Added easier way for handling error messages -> Error.rb
 3. Added more cosmetic looks.
+4. Changed the win/loss condition. Its now involving mana.
 
 Bugfixes:
 1. Fixed various bug with hero and spell selection.
@@ -28,6 +28,7 @@ Bugfixes:
 To do:
 1. Heal method -> Healing skills.
 2. Complete the heroes skill sets.
+3. 'Mana regen'
 -------------------------------------------------------------------------------
 Update - v0.1/04.07.2014
 
