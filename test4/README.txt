@@ -2,9 +2,10 @@
 There are few things you need to run this code.
 
 1st: Obviously, Ruby.
+2nd: You will need to clone this repository on your local machine.
+3rd: After everything is done:
+	>ruby main.rb to run the game
 -------------------------------------------------
-
->ruby main.rb to run the game
 
 Few notes:
 1. The game should end as soon as both heroes from one side die.
