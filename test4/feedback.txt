@@ -1,3 +1,6 @@
 FEEDBACK
+-bug with dead heroes not having mana instead of being labeled dead
+-bug with win state
+-zzz
 
 
