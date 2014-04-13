@@ -20,7 +20,7 @@ Changelog:
 2. The Luna's skill "Lunar blessing" has been added to the game.
 	Lunar Blessing - Luna calls upon the lunar goddess to bless her or allay hero, granting 10 bonus Hp. Mana cost: 7
 3. Added healing method.
-4. Removed mana as condition for win. To condition to win is back as it was -> Both heroes from one side should die.
+4. Removed mana as condition for win. The condition to win is back as it was -> Both heroes from one side should die.
 5. Added few new error handlings in Error.rb.
 
 To do:
