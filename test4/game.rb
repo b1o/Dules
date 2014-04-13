@@ -2,7 +2,7 @@ require_relative 'Heroes.rb'
 require_relative 'Error.rb'
 
 class Game
-	attr_accessor :hero_pool, :player1, :player2, :player1_name, :player2_name, :selected_hero, :selected_spell, :selected_enemy_hero, :current_input, :effect
+	attr_accessor :hero_pool, :player1, :player2, :player1_name, :player2_name, :selected_hero, :selected_spell, :selected_enemy_hero, :current_input, :effect, :hero_to_heal
 	attr_reader :invoked
 	def initialize
 		@invoked = false
@@ -215,6 +215,11 @@ class Game
 		end
 	end
 
+	def mana_regen(amount, player1, player2)
+		player1.each {|hero| hero.mana += amount}
+		player2.each {|hero| hero.mana += amount}
+	end
+
 	def select_enemy_hero(player)
 		system(@a)
 		current_hero_status()
@@ -293,7 +298,7 @@ class Game
 						@effect = "Heal"
 					end
 				else
-					@error.hero_out_of_mana(@selected_hero)
+					@error.not_enough_mana()
 					select_spell()
 				end
 			when @selected_hero.skill2_name
@@ -308,7 +313,7 @@ class Game
 						@effect = "Heal"
 					end
 				else
-					@error.hero_out_of_mana(@selected_hero)
+					@error.not_enough_mana()
 					select_spell()
 				end
 			when @selected_hero.skill3_name
@@ -323,7 +328,7 @@ class Game
 						@effect = "Heal"
 					end
 				else
-					@error.hero_out_of_mana(@selected_hero)
+					@error.not_enough_mana()
 					select_spell()
 				end
 			when @selected_hero.ultimate_name
@@ -338,7 +343,7 @@ class Game
 						@effect = "Heal"
 					end
 				else
-					@error.hero_out_of_mana(@selected_hero)
+					@error.not_enough_mana()
 					select_spell()
 				end
 			else
@@ -356,12 +361,51 @@ class Game
 		sleep(1)
 	end
 
-	def heal(player)
-		print "Choose the hero you wish to heal:\n"
-		player.each do |hero|
-			puts hero.name
+	def choose_hero_to_heal(player)
+		system(@a)
+		current_hero_status()
+		print "Choose a hero to heal: "
+		player.each {|hero| print "#{hero.name} "}
+		print "\n"
+		@hero_to_heal = gets.chomp.capitalize
+		case @hero_to_heal
+			when player[0].name
+				@hero_to_heal = player[0]
+				if @hero_to_heal.dead?
+					system(@a)
+					puts "Error: The hero is already dead."
+					sleep(1)
+					choose_hero_to_heal(player)
+				end
+				@current_input = "Your input - Hero: #{@hero_to_heal.name}"
+			when player[1].name
+				@hero_to_heal = player[1]
+				if @hero_to_heal.dead?
+					system(@a)
+					puts "Error: The hero is already dead."
+					sleep(1)
+					choose_hero_to_heal(player)
+				end
+				@current_input = "Your input - Hero: #{@hero_to_heal.name}"
+			else
+				system(@a)
+				puts "Error: No such hero." 
+				sleep(1)
+				choose_hero_to_heal(player)
+		end	
+	end
+
+	def heal(player, skill)
+		case @selected_spell
+			when @selected_hero.skill1_name
+				@selected_hero.skill1(@hero_to_heal)
+			when @selected_hero.skill2_name
+				@selected_hero.skill2(@hero_to_heal)
+			when @selected_hero.skill3_name
+				@selected_hero.skill3(@hero_to_heal)
+			when @selected_hero.ultimate_name
+				@selected_hero.ultimate(@hero_to_heal)
 		end
-		@selected_hero = gets.chomp.capitalize
 	end
 
 	def attack(player, enemy_player)
@@ -406,7 +450,7 @@ class Game
 						hero_kill(@selected_enemy_hero)
 					end
 				elsif @effect == "AOE"
-					@selected_hero.skill13(@enemy_player)
+					@selected_hero.skill3(@enemy_player)
 					@enemy_player.each do |a|
 						if a.hp != 'DEAD'
 							if a.hp <= 0
@@ -431,7 +475,7 @@ class Game
 						end
 					end
 				end
-		end
+		end		
 	end
 
 	def turn(player, enemy_player)
@@ -443,6 +487,11 @@ class Game
 		elsif @effect == "ST"
 			select_enemy_hero(enemy_player)
 			attack(player, enemy_player)
+		elsif @effect == "Heal"
+			choose_hero_to_heal(player)
+			puts @selected_spell
+			sleep(2)
+			heal(player, @selected_spell)
 		end
 	end
 
@@ -461,7 +510,7 @@ class Game
 			end
 		end
 
-		if @counter == player.size or !heroes_mana?(player)
+		if @counter == player.size
 			puts @message
 			return true
 		else

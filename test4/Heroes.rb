@@ -1,5 +1,3 @@
-require 'os'
-
 class Hero
 	attr_accessor :name, :hp, :mana, :skill1_name, :skill2_name, :skill3_name, :ultimate_name, :dead, :skills, :skills_d
 	attr_reader :skill1_d, :skill2_d, :skill3_d, :skill4_d, :skill1_effect, :skill2_effect, :skill3_effect, :ultimate_effect
@@ -95,7 +93,7 @@ class Luna < Hero
 
 	def skill3(ally_hero)
 		@mana = @mana - @skill3_mana_cost
-		ally_hero.hp += @heal
+		ally_hero.hp += 10
 		puts "#{@name} used #{@skill3_name} and healed #{ally_hero.name} for #{@heal} hit points. Mana left: #{@mana}"
 		sleep(1)
 	end

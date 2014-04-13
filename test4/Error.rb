@@ -5,10 +5,16 @@ class Error
 		sleep(1)
 	end
 
+	def not_enough_mana
+		system('cls')
+		puts "Error. Not enough mana for that skill."
+		sleep(1)
+	end
+
 	def player_out_of_mana(player)
 		system('cls')
 		puts "Error: #{player}'s heroes are out of mana."
-		sleep(2)
+		sleep(1)
 	end
 
 	def choose_dead_hero
@@ -26,6 +32,12 @@ class Error
 	def no_spell
 		system('cls')
 		puts "Error: No such skill."
+		sleep(1)
+	end
+
+	def no_hero
+		system('cls')
+		puts "Error: No such hero."
 		sleep(1)
 	end
 end

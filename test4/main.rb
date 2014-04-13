@@ -10,9 +10,9 @@ player1 = game.player1
 player2 = game.player2
 turn = 0
 game.allocate_heroes
-player1[0].mana = 10
-player1[1].mana = 10
-player2.each {|hero| hero.mana = 10}
+player1[0].mana = 100
+player1[1].mana = 100
+player2.each {|hero| hero.mana = 100}
 until game.check_for_loss(player1) or game.check_for_loss(player2)
 	if turn == 0
 		if !game.heroes_mana?(player1)
