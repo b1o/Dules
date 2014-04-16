@@ -197,9 +197,9 @@ class Game
 				if @selected_hero.dead?
 					@error.choose_dead_hero
 					select_hero(player)
-				elsif !check_hero_for_mana(@selected_hero)
-					@error.hero_out_of_mana(@selected_hero)
-					select_hero(player)
+				#elsif !check_hero_for_mana(@selected_hero)
+				#	@error.hero_out_of_mana(@selected_hero)
+				#	select_hero(player)
 				elsif hero_muted?(@selected_hero)
 					@error.muted_hero
 					select_hero(player)
@@ -210,9 +210,9 @@ class Game
 				if @selected_hero.dead?
 					@error.choose_dead_hero
 					select_hero(player)
-				elsif !check_hero_for_mana(@selected_hero)
-					@error.hero_out_of_mana(@selected_hero)
-					select_hero(player)
+				#elsif !check_hero_for_mana(@selected_hero)
+				#	@error.hero_out_of_mana(@selected_hero)
+				#	select_hero(player)
 				elsif hero_muted?(@selected_hero)
 					@error.muted_hero
 					select_hero(player)
@@ -224,9 +224,8 @@ class Game
 		end
 	end
 
-	def mana_regen(amount, player1, player2)
-		player1.each {|hero| hero.mana += amount}
-		player2.each {|hero| hero.mana += amount}
+	def mana_regen(amount, player)
+		player.each {|hero| hero.mana += amount}
 	end
 
 	def select_enemy_hero(player)
@@ -290,10 +289,6 @@ class Game
 		puts @user_input
 		gets.chomp
 		case @user_input
-			when @selected_hero.normal_attack_name
-				@selected_spell = @selected_hero.normal_attack_name
-				@current_input = @current_input + "| Skill: #{@selected_spell}" 
-				@effect == "ST"
 			when @selected_hero.skill1_name 
 				if enough_mana?(@selected_hero, @selected_hero.skill1_name)
 					@selected_spell = @selected_hero.skill1_name
@@ -353,6 +348,16 @@ class Game
 				else
 					@error.not_enough_mana()
 					select_spell()
+				end
+			when @selected_hero.normal_attack_name
+				@selected_spell = @selected_hero.normal_attack_name
+				@current_input = @current_input + "| Skill: #{@selected_spell}" 
+				if @selected_hero.normal_attack_effect == "ST"
+					@effect = "ST"
+				elsif @selected_hero.normal_attack_effect == "AOE"
+					@effect = "AOE"
+				elsif @selected_hero.normal_attack_effect == "HEAL"
+					@effect = "Heal"
 				end
 			else
 				@error.no_spell()
@@ -419,13 +424,6 @@ class Game
 	def attack(player, enemy_player)
 		@enemy_player = enemy_player
 		case @selected_spell
-			when @selected_hero.normal_attack_name
-				if @effect == "ST"
-					@selected_hero.normal_attack(@selected_enemy_hero)
-					if @selected_enemy_hero.hp <= 0
-						hero_kill(@selected_enemy_hero)
-					end 
-				end
 			when @selected_hero.skill1_name
 				if @effect == "ST"
 					@selected_hero.skill1(@selected_enemy_hero)
@@ -490,6 +488,15 @@ class Game
 						end
 					end
 				end
+			when @selected_hero.normal_attack_name
+				if @effect == "ST"
+					@selected_hero.normal_attack(@selected_enemy_hero)
+					if @selected_enemy_hero.hp <= 0
+						hero_kill(@selected_enemy_hero)
+					end
+				elsif @effect == "AOE"	
+					#
+				end
 		end		
 	end
 
@@ -517,6 +524,7 @@ class Game
 			choose_hero_to_heal(player)
 			heal(player, @selected_spell)
 		end
+		mana_regen(10, player)
 	end
 
 	def check_for_loss(player, enemy_player)

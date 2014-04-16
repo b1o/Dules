@@ -73,7 +73,7 @@ class Luna < Hero
 
 	def normal_attack(enemy_hero)
 		enemy_hero.hp -= @normal_attack_damage
-		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "#{@name} dealt #{@normal_attack_damage} to #{enemy_hero.name} using a normal attack."
 		puts "Press 'Enter' to continue..."
 		gets.chomp
 	end
@@ -125,7 +125,7 @@ class Luna < Hero
 		enemy_player_pool.each do |hero|
 			hero.hp -= @ultimate_damage
 			hero.status = "muted"
-			puts "#{hero} took #{@ultimate_damage} damage."
+			puts "#{hero.name} took #{@ultimate_damage} damage."
 			sleep(1)
 		end	
 		puts "Press 'Enter' to continue..."
@@ -177,7 +177,7 @@ class Lich < Hero
 
 	def normal_attack(enemy_hero)
 		enemy_hero.hp -= @normal_attack_damage
-		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "#{@name} dealt #{@normal_attack_damage} to #{enemy_hero.name} using a normal attack."
 		puts "Press 'Enter' to continue..."
 		gets.chomp
 	end
@@ -240,7 +240,7 @@ class Riki < Hero
 
 	def normal_attack(enemy_hero)
 		enemy_hero.hp -= @normal_attack_damage
-		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "#{@name} dealt #{@normal_attack_damage} to #{enemy_hero.name} using a normal attack."
 		puts "Press 'Enter' to continue..."
 		gets.chomp
 	end
@@ -298,7 +298,7 @@ class Juggernaut < Hero
 
 	def normal_attack(enemy_hero)
 		enemy_hero.hp -= @normal_attack_damage
-		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "#{@name} dealt #{@normal_attack_damage} to #{enemy_hero.name} using a normal attack."
 		puts "Press 'Enter' to continue..."
 		gets.chomp
 	end

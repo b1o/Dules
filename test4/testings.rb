@@ -17,7 +17,5 @@ player1.each {|hero| hero.mana = 100}
 player2.each {|hero| hero.mana = 100}
 
 
-game.select_hero(player1)
-game.select_spell
-game.select_enemy_hero(player2)
-game.attack(player1, player2)
+game.turn(player1, player2)
+game.turn(player2, player1)
