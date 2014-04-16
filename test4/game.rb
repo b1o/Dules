@@ -59,10 +59,6 @@ class Game
 		end
 	end
 
-	def change_hero_status(hero)
-		hero.status = "alive"
-	end
-
 	def muted?(hero_pool)
 		@muted_heroes = 0
 		hero_pool.each do |hero|
