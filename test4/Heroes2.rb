@@ -203,7 +203,7 @@ class Lich < Hero
 		@attacks = 0
 		@mana -= @ultimate_mana_cost
 		puts "#{@name} used #{@ultimate_name}: "
-		while @attacks < 4
+		while @attacks < 6
 			@hero_to_attack = enemy_player_pool[rand(enemy_player_pool.size)]
 			if @hero_to_attack.hp != "DEAD"
 				@hero_to_attack.hp -= @ultimate_damage
@@ -373,24 +373,27 @@ class Juggernaut < Hero
 	end
 end
 
-class Tidehunter
+class Tidehunter < Hero
 	def initialize
-		@name = "Juggernaut"
+		@name = "Tidehunter"
 		@hp = 5
 		@mana = 2
 		@dead = false
 		@status = "alive"
-		@skill1_name = "Blade Fury"
-		@skill2_name = ""
+		@skill1_name = "Gush"
+		@skill2_name = "Anchor Smash"
 		@skill3_name = ""
-		@ultimate_name = "Omnislash"
+		@ultimate_name = "Ravage"
+		@normal_attack_name = "Normal Attack"
 
 		@skill1_effect = "ST"
-		@skill2_effect = ""
+		@skill2_effect = "AOE"
 		@skill3_effect = ""
 		@ultimate_effect = "AOE"
+		@normal_attack_effect = "ST"
 
-		@skill1_damage = 20
+		@normal_attack_damage = rand(6) + 1
+		@skill1_damage = 25
 		@skill2_damage = 10
 		@skill3_damage = 10
 		@ultimate_damage = 30
@@ -398,14 +401,60 @@ class Tidehunter
 		@skill1_mana_cost = 10
 		@skill2_mana_cost = 15
 		@skill3_mana_cost = 7
-		@ultimate_mana_cost = 20
+		@ultimate_mana_cost = 25
 
-		@skill1_d = "Juggernaut unleashes his rage upon the enemy target, dealing 30 damage. Mana cost: #{@skill1_mana_cost}"
-		@skill2_d = ""
+		@normal_attack_d = "A normal attack that deals 1-6 damage and costs no mana."
+		@skill1_d = "Tidehunter literally drowns an enemy hero for #{@skill1_damage}. Mana cost: #{@skill1_mana_cost}"
+		@skill2_d = "Tidehunter spins right round with his gigantic anchor dealing #{@skill2_damage} to all enemy heroes. Mana cost: #{@skill2_mana_cost}"
 		@skill3_d = ""
-		@ultimate_d = "Juggernaut uses his OP skillz, jumping 4 times around dealing 15 damage each jump. Mana cost: #{@ultimate_mana_cost}"
+		@ultimate_d = "Tidehunter causes mother nature to behave differently, causes earthquakes,volcanos...Damages all heroes with #{@ultimate_damage}. Mana cost: #{@ultimate_mana_cost}"
 
-		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @ultimate_name]
 	end
+
+	def normal_attack(enemy_hero)
+		enemy_hero.hp -= @normal_attack_damage
+		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "Press 'Enter' to continue..."
+		gets.chomp
+	end
+
+	def skill1(enemy_hero)
+		@mana = @mana - @skill1_mana_cost
+		enemy_hero.hp = enemy_hero.hp - @skill1_damage
+		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, losing #{@skill1_mana_cost} mana."
+		sleep(1)
+		puts "Press 'Enter' to continue..."
+		gets.chomp
+	end
+
+	def skill2(enemy_player_pool)
+		@mana = @mana - @ultimate_mana_cost
+		puts "#{@name} used #{@skill2_name}. Mana left: #{@mana}".upcase
+		enemy_player_pool.each do |hero|
+			hero.hp -= @skill2_damage
+			puts "#{hero} took #{@skill2_damage} damage."
+			sleep(1)
+		end	
+		puts "Press 'Enter' to continue..."
+		gets.chomp
+	end
+
+	def skill3(ally_hero)
+
+	end
+
+	def ultimate(enemy_player_pool)
+		@mana = @mana - @ultimate_mana_cost
+		puts "#{@name} used #{@ultimate_name}. Mana left: #{@mana}".upcase
+		enemy_player_pool.each do |hero|
+			hero.hp -= @ultimate_damage
+			puts "#{hero} took #{@ultimate_damage} damage."
+			sleep(1)
+		end	
+		puts "Press 'Enter' to continue..."
+		gets.chomp
+	end
+
 end
