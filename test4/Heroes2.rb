@@ -170,8 +170,8 @@ class Lich < Hero
 		@ultimate_d = "Lich invokes a deadly chain of frost that bounces between enemies 6 times dealing #{@ultimate_damage} damage.
 		Mana cost: #{@ultimate_mana_cost} "
 
-		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @ultimate_name]
 	end
 
 	def normal_attack(enemy_hero)
@@ -250,12 +250,12 @@ class Riki < Hero
 
 		@normal_attack_d = "A normal attack that deals 4-5 damage and costs no mana."
 		@skill1_d = "Riki blinks behind the enemy target and deals 7 damage. Mana cost: #{@skill1_mana_cost}"
-		@skill2_d = "Riki throws a smoke bomb blinding an enemy hero, rendering him unable to cast a spell his next turn"
+		@skill2_d = "Riki throws a smoke bomb blinding an enemy hero, rendering him unable to cast a spell his next turn. Mana cost : #{@skills_mana_cost}"
 		@skill3_d = ""
-		@ultimate_d = "Riki sneaks from behind and does his normal attack 3 times to an enemy hero. Mana cost #{ultimate_mana_cost}"
+		@ultimate_d = "Riki sneaks from behind and does his normal attack 3 times to an enemy hero. Mana cost #{@ultimate_mana_cost}"
 
-		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @ultimate_name]
 	end
 
 	def normal_attack(enemy_hero)
@@ -273,7 +273,6 @@ class Riki < Hero
 		puts "Press 'Enter' to continue..."
 		gets.chomp
 	end
-end
 	def skill2(enemy_Hero)
 		enemy_hero.status = "muted"
 		puts "#{@name} used #{@skill2_name} on #{enemy_hero.name} and dealt #{@skill2_damage} damage, losing #{@skill2_mana_cost} mana."
@@ -288,6 +287,7 @@ end
 		puts "Press 'Enter' to continue..."
 		gets.chomp
 	end
+end
 
 class Juggernaut < Hero
 	attr_accessor :skill1_damage, :skill2_damage, :skill3_damage
@@ -323,11 +323,11 @@ class Juggernaut < Hero
 		@normal_attack_d = "A normal attack that deals 3-7 damage and costs no mana."
 		@skill1_d = "Juggernaut unleashes his rage upon the enemy target, dealing 30 damage. Mana cost: #{@skill1_mana_cost}"
 		@skill2_d = ""
-		@skill3_d = "Using ancient Japanese DIY skills, Juggernaut builds a small ward made out of nearby garbage to warm an ally heroe hit point with {@skill3_damage} hit pointd. Mana cost: #{skill3_mana_cost}"
+		@skill3_d = "Using ancient Japanese DIY skills, Juggernaut builds a small ward made out of nearby garbage to warm an ally heroe hit point with {@skill3_damage} hit pointd. Mana cost: #{@skill3_mana_cost}"
 		@ultimate_d = "Juggernaut uses his OP skillz, jumping 4 times around dealing 15 damage each jump. Mana cost: #{@ultimate_mana_cost}"
 
-		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill3_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill3_name, @ultimate_name]
 	end
 
 	def normal_attack(enemy_hero)
