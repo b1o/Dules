@@ -630,7 +630,7 @@ class Omniknight < Hero
 	end
 
 	def ultimate(enemy_player_pool)
-		# TO BE IMPLEMENTED
+		# fTO BE IMPLEMENTED
 	end
 
 end
