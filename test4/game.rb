@@ -6,7 +6,7 @@ class Game
 	attr_reader :invoked
 	def initialize
 		@invoked = false
-		@hero_pool = [Luna.new, Juggernaut.new, Lich.new, Riki.new]
+		@hero_pool = [Luna.new, Juggernaut.new, Lich.new, Riki.new, Tidehunter.new, Omniknight.new, Earthshaker.new, Enigma.new]
 		@player1 = []
 		@player2 = []
 		@effect = ""
@@ -59,7 +59,7 @@ class Game
 		end
 	end
 
-	def muted?(hero_pool)
+	def heroes_muted?(hero_pool)
 		@muted_heroes = 0
 		hero_pool.each do |hero|
 			if hero.status == "muted"
@@ -106,7 +106,7 @@ class Game
 	def allocate_heroes
 		@counter = 0
 		@allocated_hero = @hero_pool[rand(@hero_pool.size)]
-		while @counter < 2
+		while @counter < 4
 			if @player1.include?(@allocated_hero)
 				@allocated_hero = @hero_pool[rand(@hero_pool.size)]
 			else
@@ -115,13 +115,13 @@ class Game
 				@counter += 1
 			end
 
-			if @counter == 2
+			if @counter == 4
 				@counter = 0
 				break
 			end
 		end
 
-		while @counter < 2
+		while @counter < 4
 			if @player2.include?(@allocated_hero) or @player1.include?(@allocated_hero)
 				@allocated_hero = @hero_pool[rand(@hero_pool.size)]
 			else
@@ -130,7 +130,7 @@ class Game
 				@counter += 1
 			end
 
-			if @counter == 2
+			if @counter == 4
 				@counter = 0
 				break
 			end
@@ -197,9 +197,6 @@ class Game
 				if @selected_hero.dead?
 					@error.choose_dead_hero
 					select_hero(player)
-				#elsif !check_hero_for_mana(@selected_hero)
-				#	@error.hero_out_of_mana(@selected_hero)
-				#	select_hero(player)
 				elsif hero_muted?(@selected_hero)
 					@error.muted_hero
 					select_hero(player)
@@ -210,9 +207,26 @@ class Game
 				if @selected_hero.dead?
 					@error.choose_dead_hero
 					select_hero(player)
-				#elsif !check_hero_for_mana(@selected_hero)
-				#	@error.hero_out_of_mana(@selected_hero)
-				#	select_hero(player)
+				elsif hero_muted?(@selected_hero)
+					@error.muted_hero
+					select_hero(player)
+				end
+				@current_input = "Your input - Hero: #{@selected_hero.name}"
+			when player[2].name
+				@selected_hero = player[2]
+				if @selected_hero.dead?
+					@error.choose_dead_hero
+					select_hero(player)
+				elsif hero_muted?(@selected_hero)
+					@error.muted_hero
+					select_hero(player)
+				end
+				@current_input = "Your input - Hero: #{@selected_hero.name}"
+			when player[3].name
+				@selected_hero = player[3]
+				if @selected_hero.dead?
+					@error.choose_dead_hero
+					select_hero(player)
 				elsif hero_muted?(@selected_hero)
 					@error.muted_hero
 					select_hero(player)
@@ -252,6 +266,20 @@ class Game
 					select_enemy_hero(player)
 				end
 				@user_input = @user_input + " Hero to attack: #{@selected_enemy_hero.name}"
+			when player[2].name
+				@selected_enemy_hero = player[2]
+				if @selected_enemy_hero.dead?
+					@error.choose_dead_hero
+					select_enemy_hero(player)
+				end
+				@user_input = @user_input + " Hero to attack: #{@selected_enemy_hero.name}"
+			when player[3].name
+				@selected_enemy_hero = player[3]
+				if @selected_enemy_hero.dead?
+					@error.choose_dead_hero
+					select_enemy_hero(player)
+				end
+				@user_input = @user_input + " Hero to attack: #{@selected_enemy_hero.name}"
 			else
 				@error.no_hero
 				select_enemy_hero(player)
@@ -286,8 +314,6 @@ class Game
 			print "\n"
 		end
 		@user_input = gets.chomp.split.map(&:capitalize).join(' ')
-		puts @user_input
-		gets.chomp
 		case @user_input
 			when @selected_hero.skill1_name 
 				if enough_mana?(@selected_hero, @selected_hero.skill1_name)
@@ -400,6 +426,24 @@ class Game
 					choose_hero_to_heal(player)
 				end
 				@current_input = "Your input - Hero: #{@hero_to_heal.name}"
+			when player[2].name
+				@hero_to_heal = player[2]
+				if @hero_to_heal.dead?
+					system(@error.a)
+					puts "Error: The hero is already dead."
+					sleep(1)
+					choose_hero_to_heal(player)
+				end
+				@current_input = "Your input - Hero: #{@hero_to_heal.name}"
+			when player[3].name
+				@hero_to_heal = player[3]
+				if @hero_to_heal.dead?
+					system(@error.a)
+					puts "Error: The hero is already dead."
+					sleep(1)
+					choose_hero_to_heal(player)
+				end
+				@current_input = "Your input - Hero: #{@hero_to_heal.name}"
 			else
 				system(@error.a)
 				puts "Error: No such hero." 
@@ -474,7 +518,7 @@ class Game
 				end
 			when @selected_hero.ultimate_name
 				if @effect == "ST"
-					@selected_hero.skill3(@selected_enemy_hero)
+					@selected_hero.ultimate(@selected_enemy_hero)
 					if @selected_enemy_hero.hp <= 0
 						hero_kill(@selected_enemy_hero)
 					end
@@ -524,6 +568,7 @@ class Game
 			choose_hero_to_heal(player)
 			heal(player, @selected_spell)
 		end
+		player.each {|hero| hero.status = "alive"}
 		mana_regen(10, player)
 	end
 
