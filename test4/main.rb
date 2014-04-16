@@ -4,20 +4,26 @@ require_relative 'Error.rb'
 
 game = Game.new
 error = Error.new
-game.set_os('cls')
+error.set_os('cls')
 game.player_names
 player1 = game.player1
 player2 = game.player2
-turn = 0
+turn = rand(2) + 1
 game.allocate_heroes
 player1[0].mana = 100
 player1[1].mana = 100
 player2.each {|hero| hero.mana = 100}
-until game.check_for_loss(player1) or game.check_for_loss(player2)
+player1.each {|hero| hero.hp = 20}
+player2.each {|hero| hero.hp = 20}
+loop do
 	if turn == 0
 		if !game.heroes_mana?(player1)
 			error.player_out_of_mana(game.player1_name)
 			game.turn(player2, player1)
+		elsif game.muted?(player1)
+			error.muted_heroes
+			player1.each {|hero| hero.change_hero_status('alive')}
+			game.turn(player2, player1)	
 		else
 			game.turn(player1, player2)
 			turn = 1
@@ -27,9 +33,14 @@ until game.check_for_loss(player1) or game.check_for_loss(player2)
 		if !game.heroes_mana?(player2)
 			error.player_out_of_mana(game.player2_name)
 			game.turn(player1, player2)
+		elsif game.muted?(player2)
+			error.muted_heroes
+			player2.each {|hero| hero.change_hero_status('alive')}
+			game.turn(player1, player2)
 		else
 			game.turn(player2, player1)
 		end
 		turn = 0
 	end
+	game.check_for_loss(player1, player2)
 end

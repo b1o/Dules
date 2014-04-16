@@ -11,27 +11,15 @@ class Game
 		@player2 = []
 		@effect = ""
 		@error = Error.new
-	end
-
-	def os
-		if OS.windows?
-			@a = 'cls'
-		else
-			@a = 'clear'
-		end
-	end
-
-	def set_os(os)
-		@os = os
-		@a = @os
+		@error.set_os('cls')
 	end
 
 	def player_names
-		system(@a)
+		system(@error.a)
 		print "Enter 1st player name: "
 		@player1_name = gets.chomp
 
-		system(@a)
+		system(@error.a)
 		print "Enter 2nd player name: "
 		@player2_name = gets.chomp
 		@invoked = true
@@ -71,6 +59,25 @@ class Game
 		end
 	end
 
+	def change_hero_status(hero)
+		hero.status = "alive"
+	end
+
+	def muted?(hero_pool)
+		@muted_heroes = 0
+		hero_pool.each do |hero|
+			if hero.status == "muted"
+				@muted_heroes += 1
+			end
+		end
+
+		if @muted_heroes == hero_pool.size
+			return true
+		else
+			return false
+		end
+	end
+
 	def get_skill_desc(hero_name, hero_skill)
 		@hero = hero_name
 		@skill = hero_skill
@@ -88,7 +95,7 @@ class Game
 				puts "#{@hero.skill4_name}:"
 				puts @hero.skill4_d
 			else
-				#Error::no_skill()
+				@error.no_skill
 		end
 	end
 
@@ -127,7 +134,7 @@ class Game
 	end
 
 	def game_begin
-		system(@a)
+		system(@@error.a)
 		if @invoked == false
 			@player1_name = "Player1"
 			@player2_name = "Player2"
@@ -141,7 +148,7 @@ class Game
 	end
 
 	def current_hero_status
-		system(@a)
+		system(@error.a)
 		if @invoked == false
 			@player1_name = "Player1"
 			@player2_name = "Player2"
@@ -174,7 +181,7 @@ class Game
 	end
 
 	def select_hero(player)
-		system(@a)
+		system(@error.a)
 		current_hero_status()
 		print "Choose a hero to attack with: "
 		player.each {|hero| print "#{hero.name} "}
@@ -183,34 +190,26 @@ class Game
 		case @selected_hero
 			when player[0].name
 				@selected_hero = player[0]
-				if !check_hero_for_mana(@selected_hero)
-					@error.hero_out_of_mana(@selected_hero)
-					select_hero(player)
-				end
 				if @selected_hero.dead?
-					system(@a)
-					puts "Error: The hero is already dead."
-					sleep(2)
+					@error.choose_dead_hero
+					select_hero(player)
+				elsif !check_hero_for_mana(@selected_hero)
+					@error.hero_out_of_mana(@selected_hero)
 					select_hero(player)
 				end
 				@current_input = "Your input - Hero: #{@selected_hero.name}"
 			when player[1].name
 				@selected_hero = player[1]
-				if !check_hero_for_mana(@selected_hero)
-					@error.hero_out_of_mana(@selected_hero)
-					select_hero(player)
-				end
 				if @selected_hero.dead?
-					system(@a)
-					puts "Error: The hero is already dead."
-					sleep(2)
+					@error.choose_dead_hero
+					select_hero(player)
+				elsif !check_hero_for_mana(@selected_hero)
+					@error.hero_out_of_mana(@selected_hero)
 					select_hero(player)
 				end
 				@current_input = "Your input - Hero: #{@selected_hero.name}"
 			else
-				system(@a)
-				puts "Error: No such hero." 
-				sleep(2)
+				@error.no_hero
 				select_hero(player)
 		end
 	end
@@ -221,7 +220,7 @@ class Game
 	end
 
 	def select_enemy_hero(player)
-		system(@a)
+		system(@error.a)
 		current_hero_status()
 		puts @current_input
 		puts
@@ -233,25 +232,19 @@ class Game
 			when player[0].name
 				@selected_enemy_hero = player[0]
 				if @selected_enemy_hero.dead?
-					system(@a)
-					puts "Error: The hero is already dead."
-					sleep(2)
+					@error.choose_dead_hero
 					select_enemy_hero(player)
 				end
 				@current_input = @current_input + " Hero to attack: #{@selected_enemy_hero.name}"
 			when player[1].name
 				@selected_enemy_hero = player[1]
 				if @selected_enemy_hero.dead?
-					system(@a)
-					puts "Error: The hero is already dead."
-					sleep(2)
+					@error.choose_dead_hero
 					select_enemy_hero(player)
 				end
 				@user_input = @user_input + " Hero to attack: #{@selected_enemy_hero.name}"
 			else
-				system(@a)
-				puts "Error: No such hero."
-				sleep(2)
+				@error.no_hero
 				select_enemy_hero(player)
 		end
 	end
@@ -274,7 +267,7 @@ class Game
 	end
 
 	def select_spell
-		system(@a)
+		system(@error.a)
 		current_hero_status()
 		puts @current_input
 		puts
@@ -284,7 +277,6 @@ class Game
 			print "\n"
 		end
 		@user_input = gets.chomp.split.map(&:capitalize).join(' ')
-		puts @user_input
 		case @user_input
 			when @selected_hero.skill1_name 
 				if enough_mana?(@selected_hero, @selected_hero.skill1_name)
@@ -362,7 +354,7 @@ class Game
 	end
 
 	def choose_hero_to_heal(player)
-		system(@a)
+		system(@error.a)
 		current_hero_status()
 		print "Choose a hero to heal: "
 		player.each {|hero| print "#{hero.name} "}
@@ -372,7 +364,7 @@ class Game
 			when player[0].name
 				@hero_to_heal = player[0]
 				if @hero_to_heal.dead?
-					system(@a)
+					system(@error.a)
 					puts "Error: The hero is already dead."
 					sleep(1)
 					choose_hero_to_heal(player)
@@ -381,14 +373,14 @@ class Game
 			when player[1].name
 				@hero_to_heal = player[1]
 				if @hero_to_heal.dead?
-					system(@a)
+					system(@error.a)
 					puts "Error: The hero is already dead."
 					sleep(1)
 					choose_hero_to_heal(player)
 				end
 				@current_input = "Your input - Hero: #{@hero_to_heal.name}"
 			else
-				system(@a)
+				system(@error.a)
 				puts "Error: No such hero." 
 				sleep(1)
 				choose_hero_to_heal(player)
@@ -479,6 +471,17 @@ class Game
 	end
 
 	def turn(player, enemy_player)
+		if player == player1 and enemy_player == player2
+			system(@error.a)
+			puts "Its #{player1_name}'s turn!"
+			puts "Press 'Enter' to continue..."
+			gets.chomp
+		elsif player == player2 and enemy_player == player1
+			system(@error.a)
+			puts "Its #{player2_name}'s turn!"
+			puts "Press 'Enter' to continue..."
+			gets.chomp
+		end
 		current_hero_status()
 		select_hero(player)
 		select_spell
@@ -489,33 +492,38 @@ class Game
 			attack(player, enemy_player)
 		elsif @effect == "Heal"
 			choose_hero_to_heal(player)
-			puts @selected_spell
-			sleep(2)
+			sleep(1)
 			heal(player, @selected_spell)
 		end
 	end
 
-	def check_for_loss(player)
-		@message = ""
-		if player == player1
-			@message = "#{@player2_name} has won the game."
-		else
-			@message = "#{@player1_name} has won the game."
-		end
-
-		@counter = 0
+	def check_for_loss(player, enemy_player)
+		@player1_dead_heroes = 0
+		@player2_dead_heroes = 0
 		player.each do |hero|
-			if hero.dead == true
-				@counter += 1
+			if hero.dead?
+				@player1_dead_heroes += 1
 			end
 		end
 
-		if @counter == player.size
-			puts @message
-			return true
-		else
-			puts @message
-			return false
+		enemy_player.each do |hero|
+			if hero.dead?
+				@player2_dead_heroes += 1
+			end
+		end
+
+		if @player1_dead_heroes == player.size
+			puts "#{@player2_name} has won the game. Press 'Enter' to exit."
+			gets.chomp
+			abort()
+		elsif @player2_dead_heroes == enemy_player.size
+			puts "#{@player1_name} has won the game. Press 'Enter' to exit."
+			gets.chomp
+			abort()
+		elsif @player2_dead_heroes == enemy_player.size and @player1_dead_heroes == player.size
+			puts "Draw! No one wins. Press 'Enter' to exit."
+			gets.chomp
+			abort()
 		end
 	end
 end

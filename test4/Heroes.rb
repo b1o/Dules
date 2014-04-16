@@ -1,5 +1,6 @@
 class Hero
 	attr_accessor :name, :hp, :mana, :skill1_name, :skill2_name, :skill3_name, :ultimate_name, :dead, :skills, :skills_d
+	attr_accessor :skill1_damage, :skill2_damage, :skill3_damage, :status
 	attr_reader :skill1_d, :skill2_d, :skill3_d, :skill4_d, :skill1_effect, :skill2_effect, :skill3_effect, :ultimate_effect
 	attr_reader :skill1_mana_cost, :skill2_mana_cost, :skill3_mana_cost, :ultimate_mana_cost
 
@@ -22,16 +23,21 @@ class Hero
 			return false
 		end
 	end
+
+	def change_hero_status(input)
+		@input = input
+		@status = @input
+	end
 end
 
 
 class Luna < Hero
-	attr_accessor :skill1_damage, :skill2_damage, :skill3_damage
 	def initialize
 		@name = "Luna"
-		@hp = 35
+		@hp = 5
 		@mana = 2
 		@dead = false
+		@status = "alive"
 		@skill1_name = "Lucent Beam"
 		@skill2_name = "Moon Glaives"
 		@skill3_name = "Lunar Blessing"
@@ -40,12 +46,12 @@ class Luna < Hero
 		@skill1_effect = "ST"
 		@skill2_effect = "AOE"
 		@skill3_effect = "HEAL"
-		@ultimate_effect = ""
+		@ultimate_effect = "AOE"
 
 		@skill1_damage = 20
 		@skill2_damage = 10
 		@skill3_damage = 10
-		@ultimate_damage = 30
+		@ultimate_damage = 7
 
 		@skill1_mana_cost = 10
 		@skill2_mana_cost = 15
@@ -55,7 +61,7 @@ class Luna < Hero
 		@skill1_d = "Deals 20 damage to a single target. Mana cost: #{@skill1_mana_cost}"
 		@skill2_d = "Deals 10 damage to 2 random enemy heroes. Mana cost: #{@skill2_mana_cost}"
 		@skill3_d = "Luna calls upon the lunar goddess to bless her or allay hero, granting 10 bonus Hp. Mana cost: #{@skill3_mana_cost}"
-		@ultimate_d = ""
+		@ultimate_d = "Luna deals 7 damage to all enemy units and binds them in complete darkness, making them miss their next turn. Mana cost: #{@ultimate_mana_cost}"
 
 		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
 		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
@@ -66,11 +72,13 @@ class Luna < Hero
 		enemy_hero.hp = enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@skill1_mana_cost} mana."
 		sleep(1)
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 
 	def skill2(enemy_player_pool)
 		@heroes_to_attack = []
-		@mana = @mana = @skill2_mana_cost
+		@mana = @mana - @skill2_mana_cost
 		@counter = 0
 		while @counter < 2 
 			@random_hero = enemy_player_pool[rand(enemy_player_pool.size)]
@@ -89,6 +97,8 @@ class Luna < Hero
 				sleep(1)
 			end
 		end
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 
 	def skill3(ally_hero)
@@ -97,15 +107,30 @@ class Luna < Hero
 		puts "#{@name} used #{@skill3_name} and healed #{ally_hero.name} for #{@heal} hit points. Mana left: #{@mana}"
 		sleep(1)
 	end
+
+	def ultimate(enemy_player_pool)
+		@mana = @mana - @ultimate_mana_cost
+		puts "#{@name} used #{@ultimate_name}. Mana left: #{@mana}".upcase
+		enemy_player_pool.each do |hero|
+			hero.hp -= @ultimate_damage
+			hero.status = "muted"
+			puts "#{hero} took #{@ultimate_damage} damage."
+			sleep(1)
+		end	
+		puts "Press 'Enter' to continue..."
+		gets.chomp
+	end
+
 end
 
 class Lich < Hero
 	attr_accessor :skill1_damage, :skill2_damage, :skill3_damage
 	def initialize
 		@name = "Lich"
-		@hp = 35
+		@hp = 5
 		@mana = 2
 		@dead = false
+		@status = "alive"
 		@skill1_name = "Frost Blast"
 		@skill2_name = ""
 		@skill3_name = ""
@@ -141,6 +166,8 @@ class Lich < Hero
 		@enemy_hero.hp = @enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@skill1_mana_cost} mana."
 		sleep(1)
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 
 	def skill2
@@ -152,9 +179,10 @@ class Riki < Hero
 	attr_accessor :skill1_damage, :skill2_damage, :skill3_damage
 	def initialize
 		@name = "Riki"
-		@hp = 35
+		@hp = 5
 		@mana = 2
 		@dead = false
+		@status = "alive"
 		@skill1_name = "Blink Strike"
 		@skill2_name = ""
 		@skill3_name = ""
@@ -189,6 +217,8 @@ class Riki < Hero
 		enemy_hero.hp = enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@skill1_mana_cost} mana."
 		sleep(1)
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 end
 
@@ -196,9 +226,10 @@ class Juggernaut < Hero
 	attr_accessor :skill1_damage, :skill2_damage, :skill3_damage
 	def initialize
 		@name = "Juggernaut"
-		@hp = 35
+		@hp = 5
 		@mana = 2
 		@dead = false
+		@status = "alive"
 		@skill1_name = "Blade Fury"
 		@skill2_name = ""
 		@skill3_name = ""
@@ -233,6 +264,8 @@ class Juggernaut < Hero
 		enemy_hero.hp = enemy_hero.hp - @skill1_damage
 		puts "#{@name} used #{@skill1_name} on #{enemy_hero.name} and dealt #{@skill1_damage} damage, loosing #{@skill1_mana_cost} mana."
 		sleep(1)
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end 
 
 	def ultimate(enemy_player_pool)
@@ -248,5 +281,81 @@ class Juggernaut < Hero
 				sleep(1)
 			end
 		end
+		puts "Press 'Enter' to continue..."
+		gets.chomp
+	end
+end
+
+class Dazzle
+	def initialize
+		@name = "Juggernaut"
+		@hp = 5
+		@mana = 2
+		@dead = false
+		@status = "alive"
+		@skill1_name = "Blade Fury"
+		@skill2_name = ""
+		@skill3_name = ""
+		@ultimate_name = "Omnislash"
+
+		@skill1_effect = "ST"
+		@skill2_effect = ""
+		@skill3_effect = ""
+		@ultimate_effect = "AOE"
+
+		@skill1_damage = 20
+		@skill2_damage = 10
+		@skill3_damage = 10
+		@ultimate_damage = 30
+
+		@skill1_mana_cost = 10
+		@skill2_mana_cost = 15
+		@skill3_mana_cost = 7
+		@ultimate_mana_cost = 20
+
+		@skill1_d = "Juggernaut unleashes his rage upon the enemy target, dealing 30 damage. Mana cost: #{@skill1_mana_cost}"
+		@skill2_d = ""
+		@skill3_d = ""
+		@ultimate_d = "Juggernaut uses his OP skillz, jumping 4 times around dealing 15 damage each jump. Mana cost: #{@ultimate_mana_cost}"
+
+		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
+		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+	end
+end
+
+class Tidehunter
+	def initialize
+		@name = "Juggernaut"
+		@hp = 5
+		@mana = 2
+		@dead = false
+		@status = "alive"
+		@skill1_name = "Blade Fury"
+		@skill2_name = ""
+		@skill3_name = ""
+		@ultimate_name = "Omnislash"
+
+		@skill1_effect = "ST"
+		@skill2_effect = ""
+		@skill3_effect = ""
+		@ultimate_effect = "AOE"
+
+		@skill1_damage = 20
+		@skill2_damage = 10
+		@skill3_damage = 10
+		@ultimate_damage = 30
+
+		@skill1_mana_cost = 10
+		@skill2_mana_cost = 15
+		@skill3_mana_cost = 7
+		@ultimate_mana_cost = 20
+
+		@skill1_d = "Juggernaut unleashes his rage upon the enemy target, dealing 30 damage. Mana cost: #{@skill1_mana_cost}"
+		@skill2_d = ""
+		@skill3_d = ""
+		@ultimate_d = "Juggernaut uses his OP skillz, jumping 4 times around dealing 15 damage each jump. Mana cost: #{@ultimate_mana_cost}"
+
+		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
+		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
 	end
 end

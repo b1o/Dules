@@ -13,6 +13,30 @@ Few notes:
 
 
 ===============================================================================
+Update - v0.3/16.04.2014
+
+Changelog:
+1. Added the following skills to the game.
+	Luna:
+		Eclipse(Ultimate) - Luna deals 7 damage to all enemy units and binds them in complete darkness, making them miss their next turn. Mana cost: 20
+		-With this Luna is now considered finished hero. Still need skill value tweek, though.
+2. More cosmetic looks.
+3. First turn is now randomized(It was about time.)
+4. Added status variable to the heroes. The status variable can be set to 'muted' only by Luna's skill Eclipse, for now. Updates to come.
+
+Bugfixes:
+1. Fixed bug with declaring win state.
+2. Fixed error displaying for dead heroes -> Hero out of mana instead of Hero is dead.
+
+To do:
+1. Add default, 0 mana cost attack to all heroes.
+2. Mana regen
+3. Complete the rest of the heroes.
+4. More heroes.
+
+Updated by: Danail "b1o" Stoyanov
+
+-------------------------------------------------------------------------------
 Update - v0.3/13.04.2014
 
 Changelog:
@@ -27,6 +51,8 @@ To do:
 1. 'Mana regen'
 2. Complete the heroes skill sets.
 3. Need more heroes. At least 8.
+
+Updated by: Danail "b1o" Stoyanov
 -------------------------------------------------------------------------------
 Update - v0.2/09.04.2014
 
@@ -44,6 +70,8 @@ To do:
 1. Heal method -> Healing skills.
 2. Complete the heroes skill sets.
 3. 'Mana regen'
+
+Updated by: Danail "b1o" Stoyanov
 -------------------------------------------------------------------------------
 Update - v0.1/04.07.2014
 
@@ -54,6 +82,7 @@ To do:
 1. Mana still needs to be implemented.
 2. Make the 'heal' skill effect.
 
+Updated by: Danail "b1o" Stoyanov
 -------------------------------------------------------------------------------
 Update - v0.1/04.07.2014
 
@@ -64,6 +93,7 @@ Changelog:
 	Moon Glaives
 2. Working on Lunar Blessing and healing spells -> need whole new method. 
 
+Updated by: Danail "b1o" Stoyanov
 -------------------------------------------------------------------------------
 HotFix - v0.1/04.07.2014
 
@@ -77,3 +107,5 @@ Changelog:
 1. Added user input handling.
 2. Added dead heroes handling.
 3. Some cosmetic changes.
+
+Updated by: Danail "b1o" Stoyanov
