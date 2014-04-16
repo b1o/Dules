@@ -13,6 +13,19 @@ Few notes:
 
 
 ===============================================================================
+Update - v0.4/16.04.2014
+
+Changelog:
+1. Added the 'Normal Attack' skill to all heroes. It deals a set amount of damage and costs no mana.
+2. Changed how the game works, considering the mana factor. The heroes now start with 0 mana and will get +10 after each turn. The value is still to be decided.
+3. Added new methods to Error.rb for better error handling.
+
+Bugfixes:
+1. Fixed some minor cosmetic issues.
+
+Updated by: Danail "b1o" Stoyanov
+
+-------------------------------------------------------------------------------
 Update - v0.3/16.04.2014
 
 Changelog:
