@@ -8,7 +8,7 @@ error.set_os('cls')
 game.player_names
 player1 = game.player1
 player2 = game.player2
-turn = rand(2) + 1
+turn = rand(2)
 game.allocate_heroes
 player1[0].mana = 100
 player1[1].mana = 100

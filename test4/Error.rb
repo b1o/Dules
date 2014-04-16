@@ -52,4 +52,10 @@ class Error
 		puts "Your heroes are muted."
 		sleep(1)
 	end
+
+	def muted_hero
+		system(@a)
+		puts "This hero is muted."
+		sleep(1)
+	end
 end

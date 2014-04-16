@@ -1,8 +1,8 @@
 class Hero
 	attr_accessor :name, :hp, :mana, :skill1_name, :skill2_name, :skill3_name, :ultimate_name, :dead, :skills, :skills_d
 	attr_accessor :skill1_damage, :skill2_damage, :skill3_damage, :status
-	attr_reader :skill1_d, :skill2_d, :skill3_d, :skill4_d, :skill1_effect, :skill2_effect, :skill3_effect, :ultimate_effect
-	attr_reader :skill1_mana_cost, :skill2_mana_cost, :skill3_mana_cost, :ultimate_mana_cost
+	attr_reader :skill1_d, :skill2_d, :skill3_d, :skill4_d, :skill1_effect, :skill2_effect, :skill3_effect, :ultimate_effect, :normal_attack_effect
+	attr_reader :skill1_mana_cost, :skill2_mana_cost, :skill3_mana_cost, :ultimate_mana_cost, :normal_attack_name, :normal_attack_damage, :normal_attack_d
 
 	def inititalize(name, hp, mana, skill1)
 		@name = name
@@ -42,12 +42,15 @@ class Luna < Hero
 		@skill2_name = "Moon Glaives"
 		@skill3_name = "Lunar Blessing"
 		@ultimate_name = "Eclipse"
+		@normal_attack_name = "Normal Attack"
 
 		@skill1_effect = "ST"
 		@skill2_effect = "AOE"
 		@skill3_effect = "HEAL"
 		@ultimate_effect = "AOE"
+		@normal_attack_effect = "ST"
 
+		@normal_attack_damage = rand(6) + 1
 		@skill1_damage = 20
 		@skill2_damage = 10
 		@skill3_damage = 10
@@ -58,13 +61,21 @@ class Luna < Hero
 		@skill3_mana_cost = 7
 		@ultimate_mana_cost = 20
 
+		@normal_attack_d = "A normal attack that deals 1-6 damage and costs no mana."
 		@skill1_d = "Deals 20 damage to a single target. Mana cost: #{@skill1_mana_cost}"
 		@skill2_d = "Deals 10 damage to 2 random enemy heroes. Mana cost: #{@skill2_mana_cost}"
 		@skill3_d = "Luna calls upon the lunar goddess to bless her or allay hero, granting 10 bonus Hp. Mana cost: #{@skill3_mana_cost}"
 		@ultimate_d = "Luna deals 7 damage to all enemy units and binds them in complete darkness, making them miss their next turn. Mana cost: #{@ultimate_mana_cost}"
 
-		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @skill3_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+	end
+
+	def normal_attack(enemy_hero)
+		enemy_hero.hp -= @normal_attack_damage
+		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 
 	def skill1(enemy_hero)
@@ -104,7 +115,7 @@ class Luna < Hero
 	def skill3(ally_hero)
 		@mana = @mana - @skill3_mana_cost
 		ally_hero.hp += 10
-		puts "#{@name} used #{@skill3_name} and healed #{ally_hero.name} for #{@heal} hit points. Mana left: #{@mana}"
+		puts "#{@name} used #{@skill3_name} and healed #{ally_hero.name} for #{@skill3_damage} hit points. Mana left: #{@mana}"
 		sleep(1)
 	end
 
@@ -135,12 +146,15 @@ class Lich < Hero
 		@skill2_name = ""
 		@skill3_name = ""
 		@ultimate_name = ""
+		@normal_attack_name = "Normal Attack"
 
 		@skill1_effect = "ST"
 		@skill2_effect = ""
 		@skill3_effect = ""
 		@ultimate_effect = ""
+		@normal_attack_effect = "ST"
 
+		@normal_attack_damage = rand(4) + 2
 		@skill1_damage = 20
 		@skill2_damage = 10
 		@skill3_damage = 10
@@ -151,13 +165,21 @@ class Lich < Hero
 		@skill3_mana_cost = 7
 		@ultimate_mana_cost = 20
 
+		@normal_attack_d = "A normal attack that deals 2-5 damage and costs no mana."
 		@skill1_d = "Nukes the enemy target for 20 damage. Mana cost: #{@skill1_mana_cost}"
 		@skill2_d = ""
 		@skill3_d = ""
 		@ultimate_d = ""
 
-		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @skill3_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+	end
+
+	def normal_attack(enemy_hero)
+		enemy_hero.hp -= @normal_attack_damage
+		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 
 	def skill1(enemy_hero)
@@ -187,12 +209,15 @@ class Riki < Hero
 		@skill2_name = ""
 		@skill3_name = ""
 		@ultimate_name = ""
+		@normal_attack_name = "Normal Attack"
 
 		@skill1_effect = "ST"
 		@skill2_effect = ""
 		@skill3_effect = ""
 		@ultimate_effect = ""
+		@normal_attack_effect = "ST"
 
+		@normal_attack_damage = rand(2) + 4
 		@skill1_damage = 20
 		@skill2_damage = 10
 		@skill3_damage = 10
@@ -203,13 +228,21 @@ class Riki < Hero
 		@skill3_mana_cost = 7
 		@ultimate_mana_cost = 20
 
+		@normal_attack_d = "A normal attack that deals 4-5 damage and costs no mana."
 		@skill1_d = "Riki blinks behind the enemy target and deals 7 damage. Mana cost: #{@skill1_mana_cost}"
 		@skill2_d = ""
 		@skill3_d = ""
 		@ultimate_d = ""
 
-		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @skill3_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+	end
+
+	def normal_attack(enemy_hero)
+		enemy_hero.hp -= @normal_attack_damage
+		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 
 	def skill1(enemy_hero)
@@ -234,12 +267,15 @@ class Juggernaut < Hero
 		@skill2_name = ""
 		@skill3_name = ""
 		@ultimate_name = "Omnislash"
+		@normal_attack_name = "Normal Attack"
 
 		@skill1_effect = "ST"
 		@skill2_effect = ""
 		@skill3_effect = ""
 		@ultimate_effect = "AOE"
+		@normal_attack_effect = "ST"
 
+		@normal_attack_damage = rand(5) + 3
 		@skill1_damage = 20
 		@skill2_damage = 10
 		@skill3_damage = 10
@@ -250,13 +286,21 @@ class Juggernaut < Hero
 		@skill3_mana_cost = 7
 		@ultimate_mana_cost = 20
 
+		@normal_attack_d = "A normal attack that deals 3-7 damage and costs no mana."
 		@skill1_d = "Juggernaut unleashes his rage upon the enemy target, dealing 30 damage. Mana cost: #{@skill1_mana_cost}"
 		@skill2_d = ""
 		@skill3_d = ""
 		@ultimate_d = "Juggernaut uses his OP skillz, jumping 4 times around dealing 15 damage each jump. Mana cost: #{@ultimate_mana_cost}"
 
-		@skills_d = [@skill1_d, @skill2_d, @skill3_d, @ultimate_d]
-		@skills = [@skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+		@skills_d = [@normal_attack_d, @skill1_d, @skill2_d, @skill3_d, @ultimate_d]
+		@skills = [@normal_attack_name, @skill1_name, @skill2_name, @skill3_name, @ultimate_name]
+	end
+
+	def normal_attack(enemy_hero)
+		enemy_hero.hp -= @normal_attack_damage
+		puts "#{@name} dealt #{@normal_attack_damage} using a normal attack."
+		puts "Press 'Enter' to continue..."
+		gets.chomp
 	end
 
 	def skill1(enemy_hero)

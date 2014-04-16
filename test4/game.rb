@@ -74,6 +74,14 @@ class Game
 		end
 	end
 
+	def hero_muted?(hero)
+		if hero.status == "muted"
+			return true
+		else
+			return false
+		end
+	end
+
 	def get_skill_desc(hero_name, hero_skill)
 		@hero = hero_name
 		@skill = hero_skill
@@ -192,6 +200,9 @@ class Game
 				elsif !check_hero_for_mana(@selected_hero)
 					@error.hero_out_of_mana(@selected_hero)
 					select_hero(player)
+				elsif hero_muted?(@selected_hero)
+					@error.muted_hero
+					select_hero(player)
 				end
 				@current_input = "Your input - Hero: #{@selected_hero.name}"
 			when player[1].name
@@ -201,6 +212,9 @@ class Game
 					select_hero(player)
 				elsif !check_hero_for_mana(@selected_hero)
 					@error.hero_out_of_mana(@selected_hero)
+					select_hero(player)
+				elsif hero_muted?(@selected_hero)
+					@error.muted_hero
 					select_hero(player)
 				end
 				@current_input = "Your input - Hero: #{@selected_hero.name}"
@@ -273,11 +287,17 @@ class Game
 			print "\n"
 		end
 		@user_input = gets.chomp.split.map(&:capitalize).join(' ')
+		puts @user_input
+		gets.chomp
 		case @user_input
+			when @selected_hero.normal_attack_name
+				@selected_spell = @selected_hero.normal_attack_name
+				@current_input = @current_input + "| Skill: #{@selected_spell}" 
+				@effect == "ST"
 			when @selected_hero.skill1_name 
 				if enough_mana?(@selected_hero, @selected_hero.skill1_name)
 					@selected_spell = @selected_hero.skill1_name
-					@current_input = @current_input + " Skill: #{@selected_spell}"				
+					@current_input = @current_input + "| Skill: #{@selected_spell}"				
 					if @selected_hero.skill1_effect == "ST"
 						@effect = "ST"
 					elsif @selected_hero.skill1_effect == "AOE"
@@ -292,7 +312,7 @@ class Game
 			when @selected_hero.skill2_name
 				if enough_mana?(@selected_hero, @selected_hero.skill2_name)
 					@selected_spell = @selected_hero.skill2_name
-					@current_input = @current_input + " Skill: #{@selected_spell}"
+					@current_input = @current_input + "| Skill: #{@selected_spell}"
 					if @selected_hero.skill2_effect == "ST"
 						@effect = "ST"
 					elsif @selected_hero.skill2_effect == "AOE"
@@ -307,7 +327,7 @@ class Game
 			when @selected_hero.skill3_name
 				if enough_mana?(@selected_hero, @selected_hero.skill3_name)
 					@selected_spell = @selected_hero.skill3_name
-					@current_input = @current_input + " Skill: #{@selected_spell}"
+					@current_input = @current_input + "| Skill: #{@selected_spell}"
 					if @selected_hero.skill3_effect == "ST"
 						@effect = "ST"
 					elsif @selected_hero.skill3_effect == "AOE"
@@ -322,7 +342,7 @@ class Game
 			when @selected_hero.ultimate_name
 				if enough_mana?(@selected_hero, @selected_hero.ultimate_name)
 					@selected_spell = @selected_hero.ultimate_name
-					@current_input = @current_input + " Skill: #{@selected_spell}"
+					@current_input = @current_input + "| Skill: #{@selected_spell}"
 					if @selected_hero.ultimate_effect == "ST"
 						@effect = "ST"
 					elsif @selected_hero.ultimate_effect == "AOE"
@@ -399,6 +419,13 @@ class Game
 	def attack(player, enemy_player)
 		@enemy_player = enemy_player
 		case @selected_spell
+			when @selected_hero.normal_attack_name
+				if @effect == "ST"
+					@selected_hero.normal_attack(@selected_enemy_hero)
+					if @selected_enemy_hero.hp <= 0
+						hero_kill(@selected_enemy_hero)
+					end 
+				end
 			when @selected_hero.skill1_name
 				if @effect == "ST"
 					@selected_hero.skill1(@selected_enemy_hero)
@@ -488,7 +515,6 @@ class Game
 			attack(player, enemy_player)
 		elsif @effect == "Heal"
 			choose_hero_to_heal(player)
-			sleep(1)
 			heal(player, @selected_spell)
 		end
 	end
