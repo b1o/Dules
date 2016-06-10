@@ -1,6 +1,6 @@
 Dules
 =====
 
--> Current dev stage is at Test4 folder. Soon to be moved.
+An unfinised console dueling card game made with ruby for a school project. Latest version is at the test4 folder.
 
 
